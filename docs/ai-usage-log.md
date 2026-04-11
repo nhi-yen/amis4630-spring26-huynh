@@ -208,3 +208,115 @@ AI (Copilot) was used to:
 - Help with repo hygiene (.gitignore) and .NET 10 upgrade.
 
 All AI-generated code was reviewed, corrected, and validated against the Milestone 4 instructions, Cart UI Workshop, Cart API Workshop, and the grading rubric.
+
+# AI Usage Log — Lab: AI‑Assisted Security, QA & Testing Workshop  
+## Session: Week 13 (April 11, 2026)
+
+---
+
+## 1. Prompt Used With My Testing Agent
+**Prompt:**
+
+> “Tell me the best candidates for:  
+> 1. three backend unit tests,  
+> 2. one backend integration test,  
+> 3. three frontend unit tests,  
+> 4. one E2E happy-path test.  
+> Do not edit code yet. Return a short plan with file targets and why each test matters.”
+
+This activated my custom Testing Agent and triggered a full analysis of my controllers, validators, reducers, and components.
+
+---
+
+## 2. One Thing Copilot Got Wrong (and How I Caught It)
+**What Copilot got wrong:**  
+Copilot attempted to run a 6‑step E2E flow that included `/login` and `/orders`, assuming authentication and order history existed.
+
+**How I caught it:**  
+The Testing Agent’s own inspection showed my M4 app only implements:
+- `/` (products)
+- `/product/:id`
+- `/cart`
+
+No login or order history routes exist yet.  
+The E2E test correctly failed at Step 1 with:
+
+\`\`\`
+expect(locator).toBeVisible() failed
+Locator: getByRole('heading', { name: /log in|sign in|register|create account/i })
+Error: element(s) not found
+\`\`\`
+
+This confirmed the failure was expected and accurate.
+
+---
+
+## 3. Test Commands I Ran + Results
+
+### **Backend Tests**
+\`\`\`bash
+dotnet test
+\`\`\`
+**Result:** Passed  
+Validators and controller logic executed successfully.
+
+---
+
+### **Frontend Tests**
+\`\`\`bash
+npm test -- --run
+\`\`\`
+**Result:** Passed  
+\`cartReducer\` and component tests ran under Vitest.
+
+---
+
+### **E2E Tests**
+\`\`\`bash
+npx playwright test
+\`\`\`
+**Result:**  
+- **1 test executed**  
+- **1 failed** (expected)  
+- Failure at Step 1 (“register or log in”)  
+- Screenshot saved: \`01-login.png\`  
+- Error context saved: \`error-context.md\`
+
+---
+
+## 4. Evidence From Test Runs
+
+### **Backend Test Evidence**
+- All backend tests passed.
+- Verified validator rules and \`CartController\` behavior.
+
+### **Frontend Test Evidence**
+- \`cartReducer\` tests passed.
+- Component tests rendered UI and validated interactions.
+
+### **E2E Test Evidence**
+- Playwright config created (\`playwright.config.ts\`)
+- E2E spec created (\`shopping-flow.spec.ts\`)
+- Test run produced screenshots for each step  
+- Failure at Step 1 was expected due to missing login route
+
+---
+
+## 5. Quality Dimensions Self‑Check (Wednesday QA Lecture)
+
+### **Functionality**
+- Cart operations work end‑to‑end (browse → add → update → checkout).
+- E2E test correctly identifies missing login + order history features.
+
+### **Security**
+- Validators enforce safe input.
+- Backend enforces ownership checks.
+- DTOs avoid exposing internal or sensitive fields.
+
+### **Code Quality**
+- Reducer uses immutable updates.
+- API uses Include/ThenInclude correctly.
+- Service layer contains no UI logic.
+- Components follow controlled form patterns and accessibility rules.
+
+---

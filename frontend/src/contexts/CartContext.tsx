@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useReducer, useMemo, useEffect, useState } from "react";
 import type { CartState, CartAction } from "../types/cart";
 import { cartReducer, initialCartState } from "../reducers/cartReducer";
-import { getCart, addToCart, updateCartItem, removeCartItem, clearCart } from "../services/cartApi";
+import { getCart, addToCart, updateCartItem, removeCartItem, clearCart, ApiError } from "../services/cartApi";
 
 type CartContextType = {
   state: CartState;
@@ -30,7 +30,12 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         const cart = await getCart();
         dispatch({ type: "LOAD_CART", payload: { items: cart.items } });
       } catch (error) {
-        setError("Failed to load cart");
+        if (error instanceof ApiError && error.status === 401) {
+          // Token expired - redirect to login
+          window.location.href = '/login';
+          return;
+        }
+        setError(error instanceof Error ? error.message : "Failed to load cart");
         console.error("Failed to load cart:", error);
       } finally {
         setLoading(false);
@@ -57,7 +62,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const cart = await getCart();
       dispatch({ type: "LOAD_CART", payload: { items: cart.items } });
     } catch (error) {
-      setError("Failed to add to cart");
+      if (error instanceof ApiError && error.status === 401) {
+        window.location.href = '/login';
+        return;
+      }
+      setError(error instanceof Error ? error.message : "Failed to add to cart");
       console.error("Failed to add to cart:", error);
       throw error;
     } finally {
@@ -73,7 +82,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const cart = await getCart();
       dispatch({ type: "LOAD_CART", payload: { items: cart.items } });
     } catch (error) {
-      setError("Failed to update cart item");
+      if (error instanceof ApiError && error.status === 401) {
+        window.location.href = '/login';
+        return;
+      }
+      setError(error instanceof Error ? error.message : "Failed to update cart item");
       console.error("Failed to update cart item:", error);
       throw error;
     } finally {
@@ -89,7 +102,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const cart = await getCart();
       dispatch({ type: "LOAD_CART", payload: { items: cart.items } });
     } catch (error) {
-      setError("Failed to remove cart item");
+      if (error instanceof ApiError && error.status === 401) {
+        window.location.href = '/login';
+        return;
+      }
+      setError(error instanceof Error ? error.message : "Failed to remove cart item");
       console.error("Failed to remove cart item:", error);
       throw error;
     } finally {
@@ -105,7 +122,11 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const cart = await getCart();
       dispatch({ type: "LOAD_CART", payload: { items: cart.items } });
     } catch (error) {
-      setError("Failed to clear cart");
+      if (error instanceof ApiError && error.status === 401) {
+        window.location.href = '/login';
+        return;
+      }
+      setError(error instanceof Error ? error.message : "Failed to clear cart");
       console.error("Failed to clear cart:", error);
       throw error;
     } finally {
