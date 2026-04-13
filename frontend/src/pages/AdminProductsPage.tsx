@@ -157,24 +157,23 @@ export default function AdminProductsPage() {
           data-testid="admin-product-description"
           required
         />
-<input
-  type="text"
-  inputMode="decimal"
-  className={styles.priceInput}
-  value={form.price}
-  onChange={(e) => {
-    const val = e.target.value;
-
-    // Allow: "", "10", "10.", "10.5", "10.50"
-    if (/^\d*\.?\d{0,2}$/.test(val)) {
-      onChange("price", val);
-    }
-  }}
-  placeholder="Price"
-  aria-label="Product price"
-  data-testid="admin-product-price"
-  required
-/>
+        <input
+          type="text"
+          inputMode="decimal"
+          className={styles.priceInput}
+          value={form.price}
+          onChange={(e) => {
+            const val = e.target.value;
+            // Allow: "", "10", "10.", "10.5", "10.50"
+            if (/^\d*\.?\d{0,2}$/.test(val)) {
+              onChange("price", val);
+            }
+          }}
+          placeholder="Price"
+          aria-label="Product price"
+          data-testid="admin-product-price"
+          required
+        />
         <select
           value={form.category}
           onChange={(e) => onChange("category", e.target.value)}

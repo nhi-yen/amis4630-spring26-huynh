@@ -292,11 +292,15 @@ export default function Checkout() {
               aria-describedby={touched.has('state') && errors.state ? 'stateError' : undefined}
             >
               <option value="">Select state</option>
-              <option value="OH">OH</option>
-              <option value="CA">CA</option>
-              <option value="NY">NY</option>
-              <option value="TX">TX</option>
-              <option value="FL">FL</option>
+              {[
+                "AL","AK","AZ","AR","CA","CO","CT","DE","FL","GA",
+                "HI","ID","IL","IN","IA","KS","KY","LA","ME","MD",
+                "MA","MI","MN","MS","MO","MT","NE","NV","NH","NJ",
+                "NM","NY","NC","ND","OH","OK","OR","PA","RI","SC",
+                "SD","TN","TX","UT","VT","VA","WA","WV","WI","WY"
+              ].map((abbr) => (
+                <option key={abbr} value={abbr}>{abbr}</option>
+              ))}
             </select>
             {touched.has('state') && errors.state && (
               <p id="stateError" className={styles.error} role="alert">
