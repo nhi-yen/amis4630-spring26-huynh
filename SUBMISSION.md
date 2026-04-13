@@ -75,3 +75,27 @@ Full AI usage log is available here:
 - Admin account is seeded automatically via `DataSeeder`.  
 - Regular user can be created through the Register page using the credentials above.  
 - The authenticated Orders integration test now runs without modifying production code and passes under the in-memory test host.  
+
+---
+
+## 6. Local User-Secrets Setup (Required to Run)
+
+The backend requires a JWT signing key from ASP.NET Core user-secrets.
+
+From `backend/BuckeyeMarketplaceApi`, run:
+
+```bash
+dotnet user-secrets init
+dotnet user-secrets set "Jwt:Key" "ReplaceWithYourOwnLongRandomKey_AtLeast32Chars"
+```
+
+Then start the app:
+
+```bash
+dotnet restore
+dotnet run
+```
+
+Notes:
+- Any strong key works for local grading as long as `Jwt:Key` is configured.
+- The JWT key is intentionally not committed to source control.
