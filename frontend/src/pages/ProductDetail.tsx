@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import type { Product } from "../types/Product";
+import styles from "./ProductDetail.module.css";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -21,7 +22,7 @@ export default function ProductDetail() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <Link to="/">← Back to Products</Link>
+      <Link to="/" className={styles.backLink}>← Back to Products</Link>
 
       <h1>{product.title}</h1>
 

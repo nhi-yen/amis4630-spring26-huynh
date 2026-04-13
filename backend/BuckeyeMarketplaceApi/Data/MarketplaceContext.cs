@@ -1,9 +1,11 @@
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using BuckeyeMarketplaceApi.Models;
 
 namespace BuckeyeMarketplaceApi.Data
 {
-    public class MarketplaceContext : DbContext
+    public class MarketplaceContext : IdentityDbContext<IdentityUser, IdentityRole, string>
     {
         public MarketplaceContext(DbContextOptions<MarketplaceContext> options)
             : base(options)
@@ -13,6 +15,8 @@ namespace BuckeyeMarketplaceApi.Data
         public DbSet<Product> Products { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<CartItem> CartItems { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

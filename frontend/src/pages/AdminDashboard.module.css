@@ -1,0 +1,31 @@
+.page {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.links {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.error {
+  color: #9f1111;
+  font-weight: 700;
+}
+
+.adminLink {
+  color: #bb0000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.adminLink:visited {
+  color: #bb0000;
+}
+
+.adminLink:hover {
+  color: #bb0000;
+  text-decoration: none;
+}

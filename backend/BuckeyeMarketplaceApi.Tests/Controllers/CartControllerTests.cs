@@ -6,7 +6,9 @@ using BuckeyeMarketplaceApi.Data;
 using BuckeyeMarketplaceApi.Models;
 using BuckeyeMarketplaceApi.Dtos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BuckeyeMarketplaceApi.Tests.Controllers
 {
@@ -16,6 +18,8 @@ namespace BuckeyeMarketplaceApi.Tests.Controllers
     /// </summary>
     public class CartControllerTests
     {
+        private const string TestUserId = "default-user";
+
         private MarketplaceContext CreateTestContext()
         {
             var options = new DbContextOptionsBuilder<MarketplaceContext>()
@@ -24,12 +28,27 @@ namespace BuckeyeMarketplaceApi.Tests.Controllers
             return new MarketplaceContext(options);
         }
 
+        private static ControllerContext BuildAuthenticatedControllerContext()
+        {
+            return new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, TestUserId)
+                    }, "TestAuth"))
+                }
+            };
+        }
+
         [Fact(DisplayName = "GetCart_WithNoExistingCart_CreatesNewCart")]
         public async Task GetCart_WithNoExistingCart_CreatesNewCart()
         {
             // ARRANGE
             var context = CreateTestContext();
             var controller = new CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
 
             // ACT
             var result = await controller.GetCart();
@@ -41,7 +60,7 @@ namespace BuckeyeMarketplaceApi.Tests.Controllers
             
             var cartResponse = okResult!.Value as CartResponse;
             cartResponse.Should().NotBeNull();
-            cartResponse!.UserId.Should().Be("default-user");
+            cartResponse!.UserId.Should().Be(TestUserId);
             cartResponse.Items.Should().BeEmpty();
             cartResponse.TotalItems.Should().Be(0);
         }
@@ -63,6 +82,7 @@ namespace BuckeyeMarketplaceApi.Tests.Controllers
             await context.SaveChangesAsync();
 
             var controller = new CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
             var request = new AddToCartRequest { ProductId = 1, Quantity = 2 };
 
             // ACT
@@ -103,6 +123,7 @@ namespace BuckeyeMarketplaceApi.Tests.Controllers
             await context.SaveChangesAsync();
 
             var controller = new CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
             var request = new AddToCartRequest { ProductId = 1, Quantity = 3 };
 
             // ACT
@@ -124,6 +145,7 @@ namespace BuckeyeMarketplaceApi.Tests.Controllers
             // ARRANGE
             var context = CreateTestContext();
             var controller = new CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
             var request = new AddToCartRequest { ProductId = 999, Quantity = 1 };
 
             // ACT
@@ -157,6 +179,7 @@ namespace BuckeyeMarketplaceApi.Tests.Controllers
             await context.SaveChangesAsync();
 
             var controller = new CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
             var cartItemId = cartItem.Id;
             var request = new UpdateCartItemRequest { Quantity = 5 };
 
@@ -191,6 +214,7 @@ namespace BuckeyeMarketplaceApi.Tests.Controllers
             await context.SaveChangesAsync();
 
             var controller = new CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
             var cartItemId = cartItem.Id;
 
             // ACT

@@ -23,7 +23,7 @@ export const AddToCartButton: React.FC<AddToCartButtonProps> = ({ product }) => 
 
   return (
     <button
-      className={styles.button}
+      className={justAdded ? `${styles.button} ${styles.added}` : styles.button}
       onClick={handleClick}
       aria-label={`Add ${product.title} to cart`}
     >

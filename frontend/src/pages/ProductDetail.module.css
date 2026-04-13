@@ -1,0 +1,14 @@
+.backLink {
+  color: #bb0000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.backLink:visited {
+  color: #bb0000;
+}
+
+.backLink:hover {
+  color: #bb0000;
+  text-decoration: none;
+}

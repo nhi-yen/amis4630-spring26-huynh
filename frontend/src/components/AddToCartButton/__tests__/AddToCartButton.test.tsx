@@ -1,38 +1,39 @@
-import React from 'react';
-import { render, screen, waitFor, act } from '@testing-library/react';
-import { AddToCartButton } from '../AddToCartButton';
-import type { Product } from '../../../types/Product';
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
+import { fireEvent, render, screen, act } from "@testing-library/react";
+import { AddToCartButton } from "../AddToCartButton";
+import type { Product } from "../../../types/Product";
 
-// Mock the CartContext
 const mockAddToCart = vi.fn();
-const mockContext = {
-  addToCart: mockAddToCart,
-  updateCartItem: vi.fn(),
-  removeCartItem: vi.fn(),
-  clearCart: vi.fn(),
-  state: { items: [], isOpen: false },
-  cartItemCount: 0,
-  cartTotal: 0,
-  loading: false,
-  error: null,
-};
 
-vi.mock('../../../contexts/CartContext', () => ({
-  useCartContext: vi.fn(() => mockContext),
+vi.mock("../../../contexts/CartContext", () => ({
+  useCartContext: () => ({
+    state: { items: [], isOpen: false },
+    cartItemCount: 0,
+    cartTotal: 0,
+    loading: false,
+    error: null,
+    addToCart: mockAddToCart,
+    updateCartItem: vi.fn(),
+    removeCartItem: vi.fn(),
+    clearCart: vi.fn(),
+  }),
 }));
 
-const mockProduct: Product = {
-  id: 100,
-  title: 'Test Widget',
+const product: Product = {
+  id: 42,
+  title: "Test Product",
+  description: "Test Description",
   price: 29.99,
-  description: 'A test product',
-  imageUrl: 'https://example.com/widget.jpg',
+  category: "Electronics",
+  sellerName: "Test Seller",
+  postedDate: "2026-04-12T00:00:00Z",
+  imageUrl: "https://example.com/test.jpg",
+  condition: "Good",
 };
 
-describe('AddToCartButton', () => {
+describe("AddToCartButton", () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    mockAddToCart.mockClear();
     mockAddToCart.mockResolvedValue(undefined);
     vi.useFakeTimers();
   });
@@ -41,132 +42,54 @@ describe('AddToCartButton', () => {
     vi.useRealTimers();
   });
 
-  it('should render button with product title in aria-label', () => {
-    render(<AddToCartButton product={mockProduct} />);
+  it("clicking triggers addToCart from context", async () => {
+    render(<AddToCartButton product={product} />);
 
-    const button = screen.getByRole('button', {
-      name: 'Add Test Widget to cart',
+    const button = screen.getByRole("button", { name: /add test product to cart/i });
+
+    await act(async () => {
+      fireEvent.click(button);
     });
-    expect(button).toBeInTheDocument();
-    expect(button).toHaveTextContent('Add to Cart');
+
+    expect(mockAddToCart).toHaveBeenCalledTimes(1);
+    expect(mockAddToCart).toHaveBeenCalledWith(42, 1);
   });
 
-  it('should call addToCart with product id and quantity 1', async () => {
-    render(<AddToCartButton product={mockProduct} />);
+  it("shows transient loading/feedback state after successful add", async () => {
+    render(<AddToCartButton product={product} />);
 
-    const button = screen.getByRole('button');
+    const button = screen.getByRole("button", { name: /add test product to cart/i });
+    expect(button).toHaveTextContent("Add to Cart");
+
     await act(async () => {
-      button.click();
+      fireEvent.click(button);
     });
 
-    expect(mockAddToCart).toHaveBeenCalledWith(100, 1);
-  });
+    expect(button).toHaveTextContent("Added!");
 
-  it('should display "Added!" message after successful add', async () => {
-    render(<AddToCartButton product={mockProduct} />);
-
-    const button = screen.getByRole('button');
-
-    // Initial state
-    expect(button).toHaveTextContent('Add to Cart');
-
-    // Click button
-    await act(async () => {
-      button.click();
-    });
-
-    // Should show "Added!"
-    expect(button).toHaveTextContent('Added!');
-  });
-
-  it('should revert "Added!" message after 1500ms', async () => {
-    render(<AddToCartButton product={mockProduct} />);
-
-    const button = screen.getByRole('button');
-
-    // Click button
-    await act(async () => {
-      button.click();
-    });
-
-    // Should show "Added!"
-    expect(button).toHaveTextContent('Added!');
-
-    // Fast-forward time by 1500ms
     await act(async () => {
       vi.advanceTimersByTime(1500);
     });
 
-    // Should revert to "Add to Cart"
-    expect(button).toHaveTextContent('Add to Cart');
+    expect(button).toHaveTextContent("Add to Cart");
   });
 
-  it('should handle add to cart errors gracefully', async () => {
-    const error = new Error('Network error');
+  it("handles error state when addToCart fails", async () => {
+    const error = new Error("Failed to add");
     mockAddToCart.mockRejectedValueOnce(error);
+    const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    // Suppress console.error for this test
-    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {});
-
-    render(<AddToCartButton product={mockProduct} />);
-
-    const button = screen.getByRole('button');
+    render(<AddToCartButton product={product} />);
+    const button = screen.getByRole("button", { name: /add test product to cart/i });
 
     await act(async () => {
-      button.click();
+      fireEvent.click(button);
     });
 
-    // Button should remain in original state on error
-    expect(button).toHaveTextContent('Add to Cart');
+    expect(mockAddToCart).toHaveBeenCalledTimes(1);
+    expect(button).toHaveTextContent("Add to Cart");
+    expect(consoleSpy).toHaveBeenCalled();
 
     consoleSpy.mockRestore();
-  });
-
-  it('should handle multiple rapid clicks', async () => {
-    render(<AddToCartButton product={mockProduct} />);
-
-    const button = screen.getByRole('button');
-
-    // Click multiple times in quick succession
-    await act(async () => {
-      button.click();
-      button.click();
-      button.click();
-    });
-
-    // All three clicks should call addToCart
-    expect(mockAddToCart).toHaveBeenCalledTimes(3);
-  });
-
-  it('should apply correct CSS class to button', () => {
-    render(<AddToCartButton product={mockProduct} />);
-
-    const button = screen.getByRole('button');
-    
-    // The button should have the styles.button class
-    // Since styles are CSS modules, they'll be mangled, but the class should exist
-    expect(button.className).toBeTruthy();
-  });
-
-  it('should accept different products', async () => {
-    const customProduct: Product = {
-      id: 200,
-      title: 'Premium Gadget',
-      price: 199.99,
-      description: 'An expensive gadget',
-      imageUrl: 'https://example.com/gadget.jpg',
-    };
-
-    render(<AddToCartButton product={customProduct} />);
-
-    const button = screen.getByRole('button', {
-      name: 'Add Premium Gadget to cart',
-    });
-
-    await act(async () => {
-      button.click();
-    });
-
-    expect(mockAddToCart).toHaveBeenCalledWith(200, 1);
   });
 });

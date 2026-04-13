@@ -1,4 +1,17 @@
+
+import { TOKEN_KEY } from './api';
+
 const BASE_URL = 'http://localhost:5000/api/cart';
+
+/**
+ * Returns the Authorization header if a JWT token is stored, or an empty object.
+ * All cart API calls include this header so the backend's [Authorize] policy is satisfied.
+ */
+
+function getAuthHeaders(): Record<string, string> {
+  const token = localStorage.getItem(TOKEN_KEY);
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
 
 /**
  * Custom error class for API responses with HTTP status codes.
@@ -12,8 +25,17 @@ export class ApiError extends Error {
 }
 
 export async function getCart() {
-  const response = await fetch(BASE_URL);
-  
+  // If no token is stored the cart endpoint will return 401.
+  // Return an empty cart immediately so CartProvider can mount without redirecting
+  // unauthenticated users away from public pages (e.g. product list).
+  if (!localStorage.getItem(TOKEN_KEY)) {
+    return { items: [], totalItems: 0, subtotal: 0, total: 0 };
+  }
+
+  const response = await fetch(BASE_URL, {
+    headers: { ...getAuthHeaders() },
+  });
+
   if (response.status === 401) {
     throw new ApiError(401, 'Session expired. Please log in again.');
   }
@@ -31,6 +53,7 @@ export async function addToCart(productId: number, quantity: number) {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      ...getAuthHeaders(),
     },
     body: JSON.stringify({ productId, quantity }),
   });
@@ -52,6 +75,7 @@ export async function updateCartItem(cartItemId: number, quantity: number) {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
+      ...getAuthHeaders(),
     },
     body: JSON.stringify({ quantity }),
   });
@@ -71,6 +95,7 @@ export async function updateCartItem(cartItemId: number, quantity: number) {
 export async function removeCartItem(cartItemId: number) {
   const response = await fetch(`${BASE_URL}/${cartItemId}`, {
     method: 'DELETE',
+    headers: { ...getAuthHeaders() },
   });
   
   if (response.status === 401) {
@@ -87,6 +112,7 @@ export async function removeCartItem(cartItemId: number) {
 export async function clearCart() {
   const response = await fetch(`${BASE_URL}/clear`, {
     method: 'DELETE',
+    headers: { ...getAuthHeaders() },
   });
   
   if (response.status === 401) {

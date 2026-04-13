@@ -4,6 +4,9 @@ using BuckeyeMarketplaceApi.Data;
 using BuckeyeMarketplaceApi.Models;
 using BuckeyeMarketplaceApi.Dtos;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BuckeyeMarketplaceApi.Tests.Integration
 {
@@ -16,12 +19,28 @@ namespace BuckeyeMarketplaceApi.Tests.Integration
     /// </summary>
     public class CartIntegrationTests
     {
+        private const string TestUserId = "default-user";
+
         private MarketplaceContext CreateTestContext()
         {
             var options = new DbContextOptionsBuilder<MarketplaceContext>()
                 .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString())
                 .Options;
             return new MarketplaceContext(options);
+        }
+
+        private static ControllerContext BuildAuthenticatedControllerContext()
+        {
+            return new ControllerContext
+            {
+                HttpContext = new DefaultHttpContext
+                {
+                    User = new ClaimsPrincipal(new ClaimsIdentity(new[]
+                    {
+                        new Claim(ClaimTypes.NameIdentifier, TestUserId)
+                    }, "TestAuth"))
+                }
+            };
         }
 
         [Fact(DisplayName = "AddToCart_CreateNewCart_PersistsToDatabase")]
@@ -41,6 +60,7 @@ namespace BuckeyeMarketplaceApi.Tests.Integration
             await context.SaveChangesAsync();
 
             var controller = new BuckeyeMarketplaceApi.Controllers.CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
             var request = new AddToCartRequest { ProductId = 1, Quantity = 3 };
 
             // ACT
@@ -51,7 +71,7 @@ namespace BuckeyeMarketplaceApi.Tests.Integration
             
             var cartInDb = await context.Carts
                 .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.UserId == "default-user");
+                .FirstOrDefaultAsync(c => c.UserId == TestUserId);
             
             cartInDb.Should().NotBeNull("Cart should be persisted for default-user");
             cartInDb!.Items.Should().HaveCount(1);
@@ -81,6 +101,7 @@ namespace BuckeyeMarketplaceApi.Tests.Integration
             await context.SaveChangesAsync();
 
             var controller = new BuckeyeMarketplaceApi.Controllers.CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
             var request = new AddToCartRequest { ProductId = 1, Quantity = 3 };
 
             // ACT - Add 3 more of the same product
@@ -91,7 +112,7 @@ namespace BuckeyeMarketplaceApi.Tests.Integration
             
             var cartInDb = await context.Carts
                 .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.UserId == "default-user");
+                .FirstOrDefaultAsync(c => c.UserId == TestUserId);
             
             cartInDb!.Items.Should().HaveCount(1, "Should merge into existing item, not create duplicate");
             cartInDb.Items.First().Quantity.Should().Be(5, "2 existing + 3 added = 5");
@@ -123,6 +144,7 @@ namespace BuckeyeMarketplaceApi.Tests.Integration
             await context.SaveChangesAsync();
 
             var controller = new BuckeyeMarketplaceApi.Controllers.CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
             
             // ACT - Add items
             await controller.AddToCart(new AddToCartRequest { ProductId = 1, Quantity = 2 }); // 2 * 10 = 20
@@ -164,6 +186,7 @@ namespace BuckeyeMarketplaceApi.Tests.Integration
 
             var itemIdToUpdate = item.Id;
             var controller = new BuckeyeMarketplaceApi.Controllers.CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
 
             // ACT
             var result = await controller.UpdateCartItem(itemIdToUpdate, new UpdateCartItemRequest { Quantity = 2 });
@@ -196,6 +219,7 @@ namespace BuckeyeMarketplaceApi.Tests.Integration
             await context.SaveChangesAsync();
 
             var controller = new BuckeyeMarketplaceApi.Controllers.CartController(context);
+            controller.ControllerContext = BuildAuthenticatedControllerContext();
             var itemId = item.Id;
 
             // ACT - Remove item (controller only removes from "default-user" cart)

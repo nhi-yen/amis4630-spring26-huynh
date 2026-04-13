@@ -18,7 +18,7 @@ Milestone 4: Full-Stack Shopping Cart (Vertical Slice 2)
 - **What I implemented:**  
   - Replaced mock product arrays with real API calls.  
   - Added `useEffect(() => { ... }, [])` to fetch products from `/api/products`.  
-  - Implemented the three‑state pattern (`loading`, `error`, `data`).  
+  - Implemented the three-state pattern (`loading`, `error`, `data`).  
   - Used async/await + try/catch (Lecture 12 pattern).  
   - Rendered products with `.map()` once loaded.  
 - **Issues fixed:**  
@@ -202,14 +202,14 @@ AI (Copilot) was used to:
 - Build the cartApi.ts service layer.  
 - Integrate CartContext with backend API calls.  
 - Replace mock data with real API fetches.  
-- Implement loading/error states and the three‑state pattern.  
+- Implement loading/error states and the three-state pattern.  
 - Assist with EF Core Include/ThenInclude patterns.  
 - Assist with upsert logic and computed totals.  
 - Help with repo hygiene (.gitignore) and .NET 10 upgrade.
 
 All AI-generated code was reviewed, corrected, and validated against the Milestone 4 instructions, Cart UI Workshop, Cart API Workshop, and the grading rubric.
 
-# AI Usage Log — Lab: AI‑Assisted Security, QA & Testing Workshop  
+# AI Usage Log — Lab: AI-Assisted Security, QA & Testing Workshop  
 ## Session: Week 13 (April 11, 2026)
 
 ---
@@ -230,7 +230,7 @@ This activated my custom Testing Agent and triggered a full analysis of my contr
 
 ## 2. One Thing Copilot Got Wrong (and How I Caught It)
 **What Copilot got wrong:**  
-Copilot attempted to run a 6‑step E2E flow that included `/login` and `/orders`, assuming authentication and order history existed.
+Copilot attempted to run a 6-step E2E flow that included `/login` and `/orders`, assuming authentication and order history existed.
 
 **How I caught it:**  
 The Testing Agent’s own inspection showed my M4 app only implements:
@@ -241,11 +241,11 @@ The Testing Agent’s own inspection showed my M4 app only implements:
 No login or order history routes exist yet.  
 The E2E test correctly failed at Step 1 with:
 
-\`\`\`
+```
 expect(locator).toBeVisible() failed
 Locator: getByRole('heading', { name: /log in|sign in|register|create account/i })
 Error: element(s) not found
-\`\`\`
+```
 
 This confirmed the failure was expected and accurate.
 
@@ -254,33 +254,33 @@ This confirmed the failure was expected and accurate.
 ## 3. Test Commands I Ran + Results
 
 ### **Backend Tests**
-\`\`\`bash
+```bash
 dotnet test
-\`\`\`
+```
 **Result:** Passed  
 Validators and controller logic executed successfully.
 
 ---
 
 ### **Frontend Tests**
-\`\`\`bash
+```bash
 npm test -- --run
-\`\`\`
+```
 **Result:** Passed  
-\`cartReducer\` and component tests ran under Vitest.
+`cartReducer` and component tests ran under Vitest.
 
 ---
 
 ### **E2E Tests**
-\`\`\`bash
+```bash
 npx playwright test
-\`\`\`
+```
 **Result:**  
 - **1 test executed**  
 - **1 failed** (expected)  
 - Failure at Step 1 (“register or log in”)  
-- Screenshot saved: \`01-login.png\`  
-- Error context saved: \`error-context.md\`
+- Screenshot saved: `01-login.png`  
+- Error context saved: `error-context.md`
 
 ---
 
@@ -288,24 +288,24 @@ npx playwright test
 
 ### **Backend Test Evidence**
 - All backend tests passed.
-- Verified validator rules and \`CartController\` behavior.
+- Verified validator rules and `CartController` behavior.
 
 ### **Frontend Test Evidence**
-- \`cartReducer\` tests passed.
+- `cartReducer` tests passed.
 - Component tests rendered UI and validated interactions.
 
 ### **E2E Test Evidence**
-- Playwright config created (\`playwright.config.ts\`)
-- E2E spec created (\`shopping-flow.spec.ts\`)
+- Playwright config created (`playwright.config.ts`)
+- E2E spec created (`shopping-flow.spec.ts`)
 - Test run produced screenshots for each step  
 - Failure at Step 1 was expected due to missing login route
 
 ---
 
-## 5. Quality Dimensions Self‑Check (Wednesday QA Lecture)
+## 5. Quality Dimensions Self-Check (Wednesday QA Lecture)
 
 ### **Functionality**
-- Cart operations work end‑to‑end (browse → add → update → checkout).
+- Cart operations work end-to-end (browse → add → update → checkout).
 - E2E test correctly identifies missing login + order history features.
 
 ### **Security**
@@ -320,3 +320,73 @@ npx playwright test
 - Components follow controlled form patterns and accessibility rules.
 
 ---
+
+# AI Usage Log — M5: Authentication, Security & Order Processing  
+## Session: Week 14 (April 13, 2026)
+
+This section documents how AI (Copilot/Claude) assisted me during Milestone 5.  
+
+---
+
+## 1. Authentication & Protected Routes
+- Used Copilot to scaffold the login and registration forms.
+- Used AI to help structure the AuthContext and migrate it to a reducer-based pattern.
+- AI suggested fixes for token persistence, restoring auth state from localStorage, and clearing corrupt storage.
+- Verified protected routes and redirect-to-login behavior with AI guidance.
+
+---
+
+## 2. Backend Authentication & Authorization
+- Used AI to help debug missing `ClaimsPrincipal` in backend tests.
+- AI assisted in adding authenticated controller contexts so tests could call protected endpoints.
+- Used AI to verify that `/api/orders/mine` correctly uses JWT claim-scoped filtering (no URL-based user IDs).
+- Used AI to confirm admin seeding logic and ensure the Admin role/user is created on a fresh database.
+- AI helped tighten router-level Admin-only access by confirming the correct role checks and guiding the updates to `App.tsx`, `ProtectedRoute.tsx`, and `AdminDashboard.tsx`.
+
+---
+
+## 3. Updating Playwright E2E Tests
+- Used Copilot to update both E2E specs (`checkout.spec.ts` and `shopping-flow.spec.ts`) after the checkout UI changed.
+- AI identified the correct aria-labels in `Checkout.tsx` and replaced the old single textarea with multi-field selectors.
+- AI helped ensure the shippingAddress payload still matched backend expectations.
+- Verified selectors, test structure, and happy-path flow with AI assistance.
+
+---
+
+## 4. Fixing Backend Test Failures
+- Used AI to diagnose failing xUnit tests caused by missing authentication context.
+- AI helped rewrite test setup to inject a valid JWT/ClaimsPrincipal.
+- AI assisted in stabilizing the integration test by avoiding the .NET TestServer JSON serialization bug.
+- Ensured `dotnet test` passes on a fresh clone.
+- AI assisted in stabilizing the authenticated integration test in `OrdersIntegrationTests.cs` by generating a safe test-only authenticated request flow using WebApplicationFactory and in-memory EF.
+
+---
+
+## 5. Frontend Unit Tests (Vitest + RTL)
+- Used AI to write reducer tests for all AuthContext actions (`LOGIN_SUCCESS`, `LOGOUT`, `RESTORE_SESSION`, `CLEAR_CORRUPT_STORAGE`).
+- AI helped fix failing component tests by correcting imports and selectors.
+- Verified that `npm test -- --run` passes in CI mode.
+
+---
+
+## 6. Security Practices Verification
+- Used AI to cross-check that:
+  - JWT signing key is stored in user-secrets.
+  - No secrets are committed.
+  - All protected endpoints use `[Authorize]`.
+  - Admin endpoints use `[Authorize(Roles = "Admin")]`.
+  - No SQL injection (`FromSqlRaw`) or XSS (`dangerouslySetInnerHTML`) patterns exist.
+  - HTTPS redirection is enabled.
+- AI helped confirm that I met the requirement of 3+ W13 security practices.
+
+
+## Summary of AI's Role in M5
+AI was used to:
+- Debug authentication issues in backend tests.
+- Update Playwright tests to match the new checkout UI.
+- Improve AuthContext reducer logic and persistence.
+- Validate security practices and protected endpoint behavior.
+- Assist with writing reducer/component tests.
+- Help produce required documentation files.
+
+All AI-generated code and documentation were reviewed, corrected, and validated against the Milestone 5 instructions and grading rubric.

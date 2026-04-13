@@ -1,18 +1,17 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { useCartContext } from "../../contexts/CartContext";
-import { CheckoutForm } from "../CheckoutForm/CheckoutForm";
 import styles from "./CartPage.module.css";
 
 export const CartPage: React.FC = () => {
-  const { state, cartTotal, updateCartItem, removeCartItem, clearCart } = useCartContext();
+  const { state, cartTotal, updateCartItem, removeCartItem } = useCartContext();
   const { items } = state;
 
   if (items.length === 0) {
     return (
-      <div className={styles.emptyCart}>
-        <p>Your cart is empty</p>
-        <Link to="/">Browse products</Link>
+      <div className={styles.emptyState}>
+        <p className={styles.message}>Your cart is empty</p>
+        <Link to="/" className={styles.link}>Browse products</Link>
       </div>
     );
   }
@@ -80,10 +79,10 @@ export const CartPage: React.FC = () => {
       ))}
       <div className={styles.total}>
         <h2>Total: ${cartTotal.toFixed(2)}</h2>
-        <button className={styles.checkout}>Proceed to Checkout</button>
+        <Link to="/checkout" className={styles.checkout}>
+          Proceed to Checkout
+        </Link>
       </div>
-
-      {items.length > 0 && <CheckoutForm />}
     </div>
   );
-};;
+};

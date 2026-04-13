@@ -1,0 +1,160 @@
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 64px);
+  padding: 24px;
+  background: #f5f5f5;
+}
+
+.form {
+  background: #fff;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.heading {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+  color: #1a1a1a;
+}
+
+.error {
+  color: #c62828;
+  background: #ffebee;
+  border: 1px solid #ef9a9a;
+  border-radius: 4px;
+  padding: 8px 12px;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.passwordInputWrapper {
+  position: relative;
+}
+
+.passwordInputWrapper .input {
+  width: 100%;
+  padding-right: 42px;
+}
+
+.passwordToggle {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.passwordToggle:hover {
+  color: #bb0000;
+}
+
+.passwordToggle svg {
+  width: 18px;
+  height: 18px;
+}
+
+.passwordToggle:focus-visible {
+  outline: 2px solid #bb0000;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+input[type="password"],
+input[type="text"] {
+  box-sizing: border-box;
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none;
+}
+
+input[type="password"]::-webkit-textfield-decoration-container {
+  display: none;
+}
+
+.input:focus {
+  border-color: #bb0000;
+}
+
+.button {
+  padding: 12px;
+  background: #bb0000;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-top: 8px;
+}
+
+.button:hover:not(:disabled) {
+  background: #990000;
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.footer {
+  text-align: center;
+  margin: 0;
+  font-size: 0.875rem;
+  color: #555;
+}
+
+.authLink {
+  color: #bb0000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.authLink:hover {
+  color: #bb0000;
+  text-decoration: underline;
+}
+
+.authLink:visited {
+  color: #bb0000;
+}

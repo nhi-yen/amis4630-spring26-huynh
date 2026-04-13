@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 using BuckeyeMarketplaceApi.Data;
 using BuckeyeMarketplaceApi.Models;
 using BuckeyeMarketplaceApi.Dtos;
@@ -8,11 +10,10 @@ namespace BuckeyeMarketplaceApi.Controllers
 {
     [ApiController]
     [Route("api/cart")]
+    [Authorize(Policy = "User")]
     public class CartController : ControllerBase
     {
         private readonly MarketplaceContext _context;
-
-        private const string CurrentUserId = "default-user";
 
         public CartController(MarketplaceContext context)
         {
@@ -22,14 +23,17 @@ namespace BuckeyeMarketplaceApi.Controllers
         [HttpGet]
         public async Task<ActionResult<CartResponse>> GetCart()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId is null) return Unauthorized();
+
             var cart = await _context.Carts
                 .Include(c => c.Items)
                 .ThenInclude(i => i.Product)
-                .FirstOrDefaultAsync(c => c.UserId == CurrentUserId);
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
             if (cart == null)
             {
-                cart = new Cart { UserId = CurrentUserId };
+                cart = new Cart { UserId = userId };
                 _context.Carts.Add(cart);
                 await _context.SaveChangesAsync();
             }
@@ -61,6 +65,9 @@ namespace BuckeyeMarketplaceApi.Controllers
         [HttpPost]
         public async Task<ActionResult<CartItemResponse>> AddToCart(AddToCartRequest request)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId is null) return Unauthorized();
+
             var product = await _context.Products.FindAsync(request.ProductId);
             if (product == null)
             {
@@ -69,11 +76,11 @@ namespace BuckeyeMarketplaceApi.Controllers
 
             var cart = await _context.Carts
                 .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.UserId == CurrentUserId);
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
             if (cart == null)
             {
-                cart = new Cart { UserId = CurrentUserId };
+                cart = new Cart { UserId = userId };
                 _context.Carts.Add(cart);
             }
 
@@ -114,14 +121,22 @@ namespace BuckeyeMarketplaceApi.Controllers
         [HttpPut("{cartItemId}")]
         public async Task<ActionResult<CartItemResponse>> UpdateCartItem(int cartItemId, UpdateCartItemRequest request)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId is null) return Unauthorized();
+
             var cartItem = await _context.CartItems
                 .Include(i => i.Product)
                 .Include(i => i.Cart)
                 .FirstOrDefaultAsync(i => i.Id == cartItemId);
 
-            if (cartItem == null || cartItem.Cart!.UserId != CurrentUserId)
+            if (cartItem == null)
             {
                 return NotFound();
+            }
+
+            if (cartItem.Cart!.UserId != userId)
+            {
+                return Forbid();
             }
 
             cartItem.Quantity = request.Quantity;
@@ -146,13 +161,21 @@ namespace BuckeyeMarketplaceApi.Controllers
         [HttpDelete("{cartItemId}")]
         public async Task<IActionResult> RemoveCartItem(int cartItemId)
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId is null) return Unauthorized();
+
             var cartItem = await _context.CartItems
                 .Include(i => i.Cart)
                 .FirstOrDefaultAsync(i => i.Id == cartItemId);
 
-            if (cartItem == null || cartItem.Cart!.UserId != CurrentUserId)
+            if (cartItem == null)
             {
                 return NotFound();
+            }
+
+            if (cartItem.Cart!.UserId != userId)
+            {
+                return Forbid();
             }
 
             _context.CartItems.Remove(cartItem);
@@ -166,9 +189,12 @@ namespace BuckeyeMarketplaceApi.Controllers
         [HttpDelete("clear")]
         public async Task<IActionResult> ClearCart()
         {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId is null) return Unauthorized();
+
             var cart = await _context.Carts
                 .Include(c => c.Items)
-                .FirstOrDefaultAsync(c => c.UserId == CurrentUserId);
+                .FirstOrDefaultAsync(c => c.UserId == userId);
 
             if (cart == null)
             {

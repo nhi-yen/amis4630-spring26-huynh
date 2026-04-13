@@ -1,6 +1,6 @@
 .button {
   padding: 0.5rem 1rem;
-  background-color: #007bff;
+  background-color: #bb0000;
   color: white;
   border: none;
   border-radius: 4px;
@@ -10,9 +10,13 @@
 }
 
 .button:hover {
-  background-color: #0056b3;
+  background-color: #8f0000;
 }
 
 .button:active {
-  background-color: #004085;
+  background-color: #8f0000;
+}
+
+.added {
+  background-color: #8f0000;
 }

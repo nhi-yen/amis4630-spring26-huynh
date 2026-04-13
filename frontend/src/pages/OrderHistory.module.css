@@ -1,0 +1,109 @@
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+}
+
+.heading {
+  margin: 0 0 1.25rem;
+  color: #2c1810;
+  font-size: 2rem;
+}
+
+.orderList {
+  display: grid;
+  gap: 1rem;
+}
+
+.card,
+.emptyState {
+  background: #ffffff;
+  border: 1px solid #eadfce;
+  border-radius: 16px;
+  box-shadow: 0 12px 30px rgba(44, 24, 16, 0.08);
+}
+
+.card {
+  padding: 1.25rem 1.5rem;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.orderNumber {
+  margin: 0 0 0.25rem;
+  font-weight: 700;
+  color: #2c1810;
+}
+
+.confirmation {
+  margin: 0;
+  color: #6f5b4f;
+}
+
+.total {
+  margin: 0;
+  color: #bb0000;
+  font-size: 1.15rem;
+  font-weight: 800;
+}
+
+.itemList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.itemRow {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 0;
+  border-top: 1px solid #efe4d6;
+  color: #4e3d31;
+}
+
+.emptyState {
+  padding: 2rem;
+  text-align: center;
+}
+
+.message {
+  margin: 0;
+  color: #66584d;
+}
+
+.error {
+  margin: 0;
+  color: #9f1111;
+  font-weight: 700;
+}
+
+.link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #bb0000;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.link:visited {
+  color: #bb0000;
+}
+
+.link:hover {
+  color: #bb0000;
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .cardHeader,
+  .itemRow {
+    flex-direction: column;
+  }
+}
