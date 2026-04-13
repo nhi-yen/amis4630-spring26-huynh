@@ -1,4 +1,3 @@
-import React from "react";
 import { BrowserRouter, Routes, Route, Outlet } from "react-router-dom";
 import { CartProvider } from "./contexts/CartContext";
 import { Header } from "./components/Header/Header";

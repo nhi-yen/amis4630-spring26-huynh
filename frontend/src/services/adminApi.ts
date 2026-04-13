@@ -16,14 +16,14 @@ export interface AdminProduct {
 export interface ProductCreateRequest {
   title: string;
   description: string;
-  price: number;
+  price: string;
   category: string;
   sellerName: string;
   imageUrl: string;
   condition: string;
 }
 
-export interface ProductUpdateRequest extends ProductCreateRequest {}
+export type ProductUpdateRequest = ProductCreateRequest;
 
 export interface AdminOrderItem {
   productId: number;

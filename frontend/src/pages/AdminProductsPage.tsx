@@ -76,7 +76,7 @@ export default function AdminProductsPage() {
     setForm({
       title: product.title,
       description: product.description,
-      price: product.price,
+      price: product.price.toString(),
       category: product.category,
       sellerName: product.sellerName,
       imageUrl: product.imageUrl,
