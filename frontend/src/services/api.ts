@@ -10,8 +10,15 @@ import axios from 'axios';
 export const TOKEN_KEY = 'auth_token';
 export const USER_KEY = 'auth_user';
 
+const defaultApiUrl = import.meta.env.PROD
+  ? 'https://marketplace-backened-nhi2-gxb5gpcthkcqcja9.canadacentral-01.azurewebsites.net'
+  : 'http://localhost:5000';
+const configuredApiUrl = (import.meta.env.VITE_API_URL?.trim() || defaultApiUrl).trim();
+const normalizedApiUrl = configuredApiUrl.replace(/\/+$/, '');
+export const API_BASE_URL = `${normalizedApiUrl}/api`;
+
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: API_BASE_URL,
   headers: { 'Content-Type': 'application/json' },
 });
 
