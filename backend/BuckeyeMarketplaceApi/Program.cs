@@ -27,7 +27,18 @@ if (string.IsNullOrWhiteSpace(connectionString))
 }
 
 builder.Services.AddDbContext<MarketplaceContext>(options =>
-    options.UseSqlServer(connectionString));
+{
+    var isLocalDb = connectionString.Contains("(localdb)", StringComparison.OrdinalIgnoreCase);
+    if (isLocalDb && !OperatingSystem.IsWindows())
+    {
+        // LocalDB is Windows-only; use in-memory provider for Linux CI/test environments.
+        options.UseInMemoryDatabase("BuckeyeMarketplace");
+    }
+    else
+    {
+        options.UseSqlServer(connectionString);
+    }
+});
 
 // ⭐ Add ASP.NET Core Identity with password requirements
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
