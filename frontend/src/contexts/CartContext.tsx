@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useReducer, useMemo, useEffect, useState } from "react";
-import type { CartState, CartAction } from "../types/cart";
+import { createContext, useContext, useReducer, useMemo, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import type { CartState } from "../types/cart";
 import { cartReducer, initialCartState } from "../reducers/cartReducer";
 import { getCart, addToCart, updateCartItem, removeCartItem, clearCart, ApiError } from "../services/cartApi";
 
@@ -17,7 +18,7 @@ type CartContextType = {
 
 const CartContext = createContext<CartContextType | null>(null);
 
-export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [state, dispatch] = useReducer(cartReducer, initialCartState);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);

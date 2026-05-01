@@ -1,7 +1,7 @@
 
-import { TOKEN_KEY } from './api';
+import { API_BASE_URL, TOKEN_KEY } from './api';
 
-const BASE_URL = 'http://localhost:5000/api/cart';
+const BASE_URL = `${API_BASE_URL}/cart`;
 
 /**
  * Returns the Authorization header if a JWT token is stored, or an empty object.
@@ -18,9 +18,12 @@ function getAuthHeaders(): Record<string, string> {
  * Used to distinguish auth failures (401/403) from other errors.
  */
 export class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  public status: number;
+
+  constructor(status: number, message: string) {
     super(message);
     this.name = 'ApiError';
+    this.status = status;
   }
 }
 
