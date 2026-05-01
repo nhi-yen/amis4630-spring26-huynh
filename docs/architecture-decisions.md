@@ -22,10 +22,10 @@ This folder contains individual Architecture Decision Records documenting the ke
 
 The technology stack was selected to address the pain points identified in user personas and journey maps:
 
-- **React + fast rendering** â†’ Addresses Alex's need for efficient browsing and item discovery
-- **Clear component hierarchy** â†’ Helps Maya understand listings and trust item information
-- **JWT authentication + order history** â†’ Provides Jordan with reliable communication and transaction tracking
-- **Structured database schema** â†’ Ensures data consistency and trustworthiness
-- **Automated testing + CI/CD** â†’ Reduces deployment errors and supports rapid iteration
+- **React + fast rendering** → Addresses Alex's need for efficient browsing and item discovery
+- **Clear component hierarchy** → Helps Maya understand listings and trust item information
+- **JWT authentication + order history** → Provides Jordan with reliable communication and transaction tracking
+- **Structured database schema** → Ensures data consistency and trustworthiness
+- **Automated testing + CI/CD** → Reduces deployment errors and supports rapid iteration
 
 Each ADR includes detailed context and rationale for the selected technology choice and alternatives considered.
