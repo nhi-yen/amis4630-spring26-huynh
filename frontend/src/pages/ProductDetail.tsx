@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import type { Product } from "../types/Product";
 import styles from "./ProductDetail.module.css";
+import { API_BASE_URL } from "../services/api";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -9,7 +10,7 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${API_BASE_URL}/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         setProduct(data);
