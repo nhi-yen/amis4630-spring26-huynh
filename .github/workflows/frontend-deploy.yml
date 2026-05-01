@@ -61,9 +61,47 @@ jobs:
           name: frontend-dist
           path: ./dist
 
-      - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: marketplace-frontend-nhi2
-          package: ./dist
-          publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
+      - name: Create deployment zip
+        run: |
+          cd dist
+          zip -r ../frontend-dist.zip .
+
+      - name: Deploy to Azure App Service via ZipDeploy
+        shell: pwsh
+        env:
+          AZURE_FRONTEND_PUBLISH_PROFILE: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
+        run: |
+          if ([string]::IsNullOrWhiteSpace($env:AZURE_FRONTEND_PUBLISH_PROFILE)) {
+            throw "AZURE_FRONTEND_PUBLISH_PROFILE is empty or missing."
+          }
+
+          [xml]$publishProfileXml = $env:AZURE_FRONTEND_PUBLISH_PROFILE
+          $zipProfile = $publishProfileXml.publishData.publishProfile |
+            Where-Object { $_.publishMethod -eq 'ZipDeploy' } |
+            Select-Object -First 1
+
+          if (-not $zipProfile) {
+            throw "ZipDeploy profile not found in AZURE_FRONTEND_PUBLISH_PROFILE."
+          }
+
+          $publishUrl = $zipProfile.publishUrl
+          $userName = $zipProfile.userName
+          $userPassword = $zipProfile.userPWD
+
+          if ([string]::IsNullOrWhiteSpace($publishUrl) -or
+              [string]::IsNullOrWhiteSpace($userName) -or
+              [string]::IsNullOrWhiteSpace($userPassword)) {
+            throw "Publish profile is missing publishUrl, userName, or userPWD."
+          }
+
+          $zipPath = Join-Path $PWD "frontend-dist.zip"
+          if (-not (Test-Path $zipPath)) {
+            throw "Deployment zip not found at $zipPath"
+          }
+
+          $basicAuth = [Convert]::ToBase64String([Text.Encoding]::ASCII.GetBytes("$userName`:$userPassword"))
+          $headers = @{ Authorization = "Basic $basicAuth" }
+          $zipDeployUrl = "https://$publishUrl/api/zipdeploy"
+
+          $response = Invoke-WebRequest -Uri $zipDeployUrl -Method Post -Headers $headers -InFile $zipPath -ContentType "application/zip"
+          Write-Host "ZipDeploy HTTP status: $($response.StatusCode)"
