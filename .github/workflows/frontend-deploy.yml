@@ -94,6 +94,10 @@ jobs:
             throw "Publish profile is missing publishUrl, userName, or userPWD."
           }
 
+          if ($userName -eq 'REDACTED' -or $userPassword -eq 'REDACTED') {
+            throw "AZURE_FRONTEND_PUBLISH_PROFILE contains redacted credentials. Download the publish profile from Azure Portal (Get publish profile), then paste the full file content into the GitHub secret."
+          }
+
           $zipPath = Join-Path $PWD "frontend-dist.zip"
           if (-not (Test-Path $zipPath)) {
             throw "Deployment zip not found at $zipPath"
