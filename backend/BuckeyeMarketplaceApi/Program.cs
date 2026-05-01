@@ -19,8 +19,15 @@ builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "DefaultConnection is not configured. Set ConnectionStrings__DefaultConnection in your environment.");
+}
+
 builder.Services.AddDbContext<MarketplaceContext>(options =>
-    options.UseInMemoryDatabase("BuckeyeMarketplace"));
+    options.UseSqlServer(connectionString));
 
 // ⭐ Add ASP.NET Core Identity with password requirements
 builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
@@ -52,6 +59,9 @@ if (string.IsNullOrEmpty(jwtKey))
         "JWT Key is not configured. Please run: dotnet user-secrets set Jwt:Key <your-secret-key>");
 }
 
+var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "BuckeyeMarketplace";
+var jwtAudience = builder.Configuration["Jwt:Audience"] ?? "BuckeyeMarketplaceApi";
+
 var key = Encoding.ASCII.GetBytes(jwtKey);
 builder.Services.AddAuthentication(options =>
 {
@@ -65,9 +75,9 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(key),
         ValidateIssuer = true,
-        ValidIssuer = "BuckeyeMarketplace",
+        ValidIssuer = jwtIssuer,
         ValidateAudience = true,
-        ValidAudience = "BuckeyeMarketplaceApi",
+        ValidAudience = jwtAudience,
         ValidateLifetime = true,
         ClockSkew = TimeSpan.Zero
     };
@@ -83,12 +93,15 @@ builder.Services.AddAuthorization(options =>
 // ⭐ Register AuthService for JWT token generation
 builder.Services.AddScoped<IAuthService, AuthService>();
 
-// ⭐ Add CORS so React (5173) can call the API (5000)
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? new[] { "http://localhost:5173" };
+
+// ⭐ Add CORS for configured frontend origins
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReact", policy =>
     {
-        policy.WithOrigins("http://localhost:5173")
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod();
     });

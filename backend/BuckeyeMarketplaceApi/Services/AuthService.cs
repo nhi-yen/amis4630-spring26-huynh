@@ -40,6 +40,9 @@ namespace BuckeyeMarketplaceApi.Services
                     throw new InvalidOperationException("JWT Key is not configured. Use: dotnet user-secrets set Jwt:Key <your-key>");
                 }
 
+                var jwtIssuer = _configuration["Jwt:Issuer"] ?? "BuckeyeMarketplace";
+                var jwtAudience = _configuration["Jwt:Audience"] ?? "BuckeyeMarketplaceApi";
+
                 var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
                 var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
@@ -57,8 +60,8 @@ namespace BuckeyeMarketplaceApi.Services
                 }
 
                 var token = new JwtSecurityToken(
-                    issuer: "BuckeyeMarketplace",
-                    audience: "BuckeyeMarketplaceApi",
+                    issuer: jwtIssuer,
+                    audience: jwtAudience,
                     claims: claims,
                     expires: DateTime.UtcNow.AddMinutes(60),
                     signingCredentials: credentials
