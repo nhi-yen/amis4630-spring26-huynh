@@ -1,4 +1,3 @@
-import React from "react";
 import { Link } from "react-router-dom";
 import { AddToCartButton } from "./AddToCartButton/AddToCartButton";
 import type { Product } from "../types/Product";

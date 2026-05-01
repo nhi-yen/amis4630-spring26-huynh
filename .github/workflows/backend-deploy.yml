@@ -35,7 +35,7 @@ jobs:
         run: dotnet build backend/BuckeyeMarketplaceApi/BuckeyeMarketplaceApi.csproj --configuration Release --no-restore
 
       - name: Run backend tests
-        run: dotnet test backend/BuckeyeMarketplaceApi.Tests/BuckeyeMarketplaceApi.Tests.csproj --configuration Release --no-build
+        run: dotnet test backend/BuckeyeMarketplaceApi.Tests/BuckeyeMarketplaceApi.Tests.csproj --configuration Release
 
   deploy:
     runs-on: ubuntu-latest
