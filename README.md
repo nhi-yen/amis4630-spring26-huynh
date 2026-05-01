@@ -41,7 +41,7 @@ npm run dev
 
 ### Run all tests:
 ```bash
-npm run test:run                                      # Frontend
+npm run test:run                                     # Frontend
 dotnet test backend/                                 # Backend
 cd frontend && npx playwright test                   # E2E
 ```
@@ -104,7 +104,7 @@ cd frontend && npx playwright test                   # E2E
 ### A) Clone and install frontend dependencies
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/nhi-yen/amis4630-spring26-huynh.git
 cd amis4630-spring26-huynh/frontend
 npm install
 ```
@@ -183,6 +183,9 @@ Pipeline behavior:
 ### Current production endpoints
 - Frontend: https://marketplace-frontend-nhi2.azurewebsites.net/
 - Backend: https://marketplace-backened-nhi2-gxb5gpcthkcqcja9.canadacentral-01.azurewebsites.net/
+- Backend API health check example: https://marketplace-backened-nhi2-gxb5gpcthkcqcja9.canadacentral-01.azurewebsites.net/api/products
+
+Note: The backend root path `/` may return 404 by design because this is an API-only service.
 
 ## 5) API Documentation / Swagger
 

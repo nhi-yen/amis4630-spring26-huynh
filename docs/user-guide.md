@@ -35,7 +35,7 @@ Click on a product to see the full details page.
 
 Click the **Register** link in the header. You'll see the registration form:
 
-![Registration form](../docs/screenshots/01-register.png)
+![Registration form](../frontend/test-results/checkpoints/01-register.png)
 
 **To register:**
 1. Enter your email address
@@ -47,7 +47,7 @@ Click the **Register** link in the header. You'll see the registration form:
 
 If you already have an account, click the **Login** link.
 
-![Login form](../docs/screenshots/02-login.png)
+![Login form](../frontend/test-results/checkpoints/02-login.png)
 
 **To log in:**
 1. Enter your email address
@@ -75,7 +75,7 @@ The button will show **"Added!"** briefly to confirm.
 
 Click the **Cart** link in the header (the header shows your cart item count in a badge).
 
-![Cart page with items](../docs/screenshots/04-cart.png)
+![Cart page with items](../frontend/test-results/checkpoints/04-cart.png)
 
 **In your cart, you can:**
 - See all items you've added
@@ -105,7 +105,7 @@ Once submitted, the button shows **"Processing..."** while your order is created
 
 After successful checkout, you'll see a confirmation page:
 
-![Order confirmation](../docs/screenshots/05-order-confirmation.png)
+![Order confirmation](../docs/screenshots/user-flow-05-order-confirmation.png)
 
 Your order has been placed! The page shows:
 - Order confirmation message
