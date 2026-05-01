@@ -62,7 +62,7 @@ jobs:
           path: ./dist
 
       - name: Deploy to Azure App Service
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
           app-name: marketplace-frontend-nhi2
           package: ./dist
