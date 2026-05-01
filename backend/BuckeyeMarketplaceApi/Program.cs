@@ -66,8 +66,19 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 var jwtKey = builder.Configuration["Jwt:Key"];
 if (string.IsNullOrEmpty(jwtKey))
 {
-    throw new InvalidOperationException(
-        "JWT Key is not configured. Please run: dotnet user-secrets set Jwt:Key <your-secret-key>");
+    var isCi = string.Equals(Environment.GetEnvironmentVariable("CI"), "true", StringComparison.OrdinalIgnoreCase);
+    var isTestEnvironment = builder.Environment.IsEnvironment("Testing");
+
+    if (isCi || isTestEnvironment)
+    {
+        // CI/integration tests may not provide secrets; use a deterministic test-only key.
+        jwtKey = "CI_TEST_ONLY_JWT_KEY_CHANGE_ME_1234567890";
+    }
+    else
+    {
+        throw new InvalidOperationException(
+            "JWT Key is not configured. Please run: dotnet user-secrets set Jwt:Key <your-secret-key>");
+    }
 }
 
 var jwtIssuer = builder.Configuration["Jwt:Issuer"] ?? "BuckeyeMarketplace";
