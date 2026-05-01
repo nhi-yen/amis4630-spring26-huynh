@@ -16,8 +16,8 @@ These credentials come from `DataSeeder` and work on every fresh database:
 ### **Regular User (created manually through Register page)**
 A working test account for graders:
 
-- **Email:** testuser@example.com  
-- **Password:** TestUser123!  
+- **Email:** testing@test.com  
+- **Password:** Testing1!  
 - **Role:** User  
 
 ---
@@ -45,11 +45,27 @@ No usage of `dangerouslySetInnerHTML`; React’s default escaping prevents store
 
 Full AI usage log is available here:
 
-➡️ **[AI-USAGE.md](./AI-USAGE.md)**
+➡️ **[ai-usage.md](./docs/ai-usage.md)**
 
 ---
 
 ## 4. Verification Checklist
+
+### **Test Source Links (M5 + M6 evidence)**
+- Frontend E2E specs:
+	- [checkout.spec.ts](./frontend/tests/e2e/checkout.spec.ts)
+	- [shopping-flow.spec.ts](./frontend/tests/e2e/shopping-flow.spec.ts)
+- Frontend checkpoint outputs:
+	- [frontend/test-results/checkpoints](./frontend/test-results/checkpoints/)
+- Backend controller tests:
+	- [CartControllerTests.cs](./backend/BuckeyeMarketplaceApi.Tests/Controllers/CartControllerTests.cs)
+	- [CartController_AddToCart_DuplicateMergeLogicTests.cs](./backend/BuckeyeMarketplaceApi.Tests/Controllers/CartController_AddToCart_DuplicateMergeLogicTests.cs)
+	- [CartController_AddToCart_ProductNotFoundTests.cs](./backend/BuckeyeMarketplaceApi.Tests/Controllers/CartController_AddToCart_ProductNotFoundTests.cs)
+- Backend integration tests:
+	- [CartIntegrationTests.cs](./backend/BuckeyeMarketplaceApi.Tests/Integration/CartIntegrationTests.cs)
+	- [OrdersIntegrationTests.cs](./backend/BuckeyeMarketplaceApi.Tests/Integration/OrdersIntegrationTests.cs)
+- Backend validator tests:
+	- [AddToCartRequestValidatorTests.cs](./backend/BuckeyeMarketplaceApi.Tests/Validators/AddToCartRequestValidatorTests.cs)
 
 ### **Backend**
 - [x] `dotnet build` succeeds with no warnings related to my code  

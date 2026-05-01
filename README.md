@@ -1,163 +1,263 @@
-# amis4630-spring26-huynh
-AMIS 4630 Buckeye Marketplace Project
+# Buckeye Marketplace
 
-<h1>Buckeye Marketplace</h1>
+Full-stack student marketplace application for ACCTMIS 4630.
 
-<p>
-Buckeye Marketplace is a student-focused peer-to-peer marketplace designed to help Ohio State students buy and sell pre-owned textbooks, dorm items, and class supplies safely and efficiently. The system is grounded in user research from Milestone 1, including personas and a journey map that identified pain points around cluttered browsing, unclear listings, unreliable seller communication, and safety concerns when meeting strangers.
-</p>
+Buckeye Marketplace supports product browsing, authentication, cart and checkout workflows, order history, and admin operations. The project uses a React + TypeScript frontend and an ASP.NET Core Web API backend with Entity Framework Core, Identity, and JWT authentication.
 
-<br>
+## CI/CD Status
 
-<h2>Milestone 2 — Architecture Design & Frontend Foundation</h2>
+[![Frontend CI/CD](https://github.com/nhi-yen/amis4630-spring26-huynh/actions/workflows/frontend-deploy.yml/badge.svg)](https://github.com/nhi-yen/amis4630-spring26-huynh/actions/workflows/frontend-deploy.yml)
+[![Backend CI/CD](https://github.com/nhi-yen/amis4630-spring26-huynh/actions/workflows/backend-deploy.yml/badge.svg)](https://github.com/nhi-yen/amis4630-spring26-huynh/actions/workflows/backend-deploy.yml)
 
-<p>
-This milestone focused on designing the system architecture, defining the component hierarchy using Atomic Design, and establishing the frontend foundation for Buckeye Marketplace. All design decisions were grounded in Milestone 1 research, including personas and journey map pain points.
-</p>
+---
 
-<br>
+## ⚡ Quick Start
 
-<h3>Feature Prioritization</h3>
+### Run locally in 3 steps:
 
-<p>
-Features were prioritized using insights from the Milestone 1 journey map and personas, focusing on what is required to launch a usable MVP versus what can be deferred to later milestones.
-</p>
-
-<h4>Must-Have Features</h4>
-<ul>
-  <li>Product Catalog</li>
-  <li>Student-Focused Item Categories</li>
-  <li>Basic Search Bar</li>
-  <li>Filters for Condition, Price, and Category</li>
-  <li>Listing Cards with Photos and Details</li>
-  <li>Required Listing Fields</li>
-  <li>User Registration & Login</li>
-  <li>User Profiles with Basic Info</li>
-  <li>In-App Messaging (Simple Chat)</li>
-  <li>Seller Response Status (Active/Inactive)</li>
-  <li>Safe Meetup Location Suggestions</li>
-  <li>Pickup Time Selector</li>
-</ul>
-
-<h4>Should-Have Features</h4>
-<ul>
-  <li>Report Listing Button</li>
-  <li>Simple Notification Badge</li>
-  <li>Item Availability Toggle</li>
-  <li>Campus Map Link for Meetup Spots</li>
-  <li>Basic Sorting Options</li>
-  <li>Item Condition Labels</li>
-  <li>Reviews & Ratings</li>
-</ul>
-
-<h4>Could-Have Features</h4>
-<ul>
-  <li>Shopping Cart</li>
-  <li>Admin Dashboard</li>
-  <li>Cloud Deployment</li>
-  <li>Block User Option</li>
-  <li>Item Tags</li>
-</ul>
-
-<br>
-
-<h3>Architecture Decisions</h3>
-
-<p>
-Key technology decisions were documented using Architecture Decision Records (ADR) to explain how each choice supports user needs identified in Milestone 1.
-</p>
-
-<ul>
-  <li>React was selected for the frontend to support fast, responsive browsing and reusable UI components.</li>
-  <li>.NET Web API was selected for the backend to provide reliable product data access and buyer–seller messaging.</li>
-  <li>SQL was selected for structured storage of users, products, messages, and meetup details.</li>
-  <li>GitHub Projects was used for feature prioritization and Kanban-based workflow management.</li>
-</ul>
-
-<br>
-
-<h3>Documentation</h3>
-
-<p>
-All design and architecture documentation for Milestone 2 is stored in the <code>/docs</code> folder:
-</p>
-
-<ul>
-  <li>System Architecture Diagram</li>
-  <li>Database Schema Design (ERD)</li>
-  <li>Architecture Decision Records (ADR)</li>
-  <li>Component Architecture (Atomic Design)</li>
-</ul>
-
-<br>
-
-<h3>AI Tool Usage (Milestone 2)</h3>
-
-<p>
-AI tools were used as a research and clarification aid during Milestone 2 to validate architectural decisions, component structure, and database relationships. All final design decisions were reviewed and aligned with course lectures, personas, and journey map findings.
-</p>
-
-
-<br><br>
-
-<h2>Milestone 3 — Product Catalog (Vertical Slice 1)</h2>
-
-<p>
-This milestone implements the first working feature of Buckeye Marketplace: a complete vertical slice of the Product Catalog. Users can view all products, click a product card, and see full product details. All data is fetched live from the .NET API using an in-memory product list.
-</p>
-
-<h3>How to Run the Project</h3>
-
-<p><strong>Backend (.NET API)</strong></p>
-<pre>
+```bash
+# 1. Backend (in terminal 1)
 cd backend/BuckeyeMarketplaceApi
-dotnet run
-</pre>
-<p>Runs at: <code>http://localhost:5000</code></p>
+dotnet restore
+dotnet user-secrets init
+dotnet user-secrets set "Jwt:Key" "MyLongRandomSecretKey123456789!"
+dotnet run --launch-profile http
+```
 
-<p><strong>Frontend (React + Vite)</strong></p>
-<pre>
+```bash
+# 2. Frontend (in terminal 2)
 cd frontend
 npm install
+echo "VITE_API_URL=http://localhost:5000" > .env.local
 npm run dev
-</pre>
-<p>Runs at: <code>http://localhost:5173</code></p>
+```
 
-<br>
+**Frontend**: http://localhost:5173  
+**Backend Swagger**: http://localhost:5000/swagger
 
-<h3>Screenshots</h3>
+### Test accounts:
+- **Admin**: admin@buckeye.local / Admin@1234!
+- **User**: testing@test.com / Testing1! (register via UI)
 
-<p><strong>Product List Page</strong></p>
-<p>
-  <img width="800" alt="Product List Screenshot"
-    src="https://github.com/user-attachments/assets/2dc6ad1d-5ae8-429b-a353-bfdcba53cb78" />
-</p>
+### Run all tests:
+```bash
+npm run test:run                                      # Frontend
+dotnet test backend/                                 # Backend
+cd frontend && npx playwright test                   # E2E
+```
 
-<br>
+---
 
-<p><strong>Product Detail Page</strong></p>
-<p>
-  <img width="800" alt="Product Detail Screenshot"
-    src="https://github.com/user-attachments/assets/f4855735-a6fb-4bca-91b2-610e7543a635" />
-</p>
+## 1) Project Description and Features
 
+### Core User Features
+- Product catalog with live API data
+- Product detail page
+- User registration and login (JWT-based)
+- Authenticated cart operations (add, update quantity, remove, clear)
+- Checkout flow with order creation
+- Order confirmation and order history
 
-<br>
+### Admin Features
+- Admin dashboard
+- Admin product management
+- Admin order management with status updates
 
-<h3>AI Tool Usage (Milestone 3)</h3>
+### Quality and Delivery Features
+- Backend unit/integration tests (xUnit)
+- Frontend unit/component tests (Vitest + React Testing Library)
+- E2E tests (Playwright)
+- CI/CD pipelines for frontend and backend (GitHub Actions)
+- Deployment to Azure App Service
 
-<p>
-AI tools were used to support debugging and implementation during Milestone 3. Specifically, AI assisted with:
-</p>
+## 2) Technology Stack (with versions)
 
-<ul>
-  <li>Configuring CORS so the React app could call the .NET API</li>
-  <li>Writing fetch logic for <code>GET /api/products</code> and <code>GET /api/products/{id}</code></li>
-  <li>Setting up React Router for the Product Detail page</li>
-  <li>Clarifying loading and empty state patterns</li>
-</ul>
+### Frontend
+- Node.js: 22.x (CI runner version)
+- React: 19.2.0
+- React Router DOM: 7.13.1
+- TypeScript: 5.9.3
+- Vite: 8.0.0-beta.13
+- Axios: 1.15.0
+- Testing: Vitest 4.1.4, React Testing Library 16.3.2, Playwright 1.59.1
 
-<p>
-A detailed record of prompts, what was accepted, and what was modified is included in the GitHub commit messages for this milestone.
-</p>
+### Backend
+- .NET SDK: 10.0.100
+- ASP.NET Core target framework: net10.0
+- Entity Framework Core: 8.0.0
+- SQL Server provider: 8.0.0
+- ASP.NET Core Identity + JWT Bearer auth: 8.0.0
+- FluentValidation: 11.3.0
+- Swagger tooling: Swashbuckle.AspNetCore 6.6.2
+
+### Infrastructure / DevOps
+- GitHub Actions
+- Azure App Service (frontend + backend)
+
+## 3) Setup Instructions (Local Development)
+
+### Prerequisites
+- .NET SDK 10.0.100
+- Node.js 22+ and npm
+- SQL Server LocalDB (recommended on Windows) or a SQL Server instance
+
+### A) Clone and install frontend dependencies
+
+```bash
+git clone <your-repo-url>
+cd amis4630-spring26-huynh/frontend
+npm install
+```
+
+### B) Configure backend secrets and run backend
+
+```bash
+cd ../backend/BuckeyeMarketplaceApi
+dotnet restore
+dotnet user-secrets init
+dotnet user-secrets set "Jwt:Key" "ReplaceWithYourOwnLongRandomKey_AtLeast32Chars"
+dotnet run --launch-profile http
+```
+
+Backend local URL:
+- http://localhost:5000
+
+Swagger (Development only):
+- http://localhost:5000/swagger
+
+### C) Configure frontend API URL and run frontend
+
+From the frontend folder, create a local env file:
+
+```bash
+cd ../../frontend
+```
+
+Create `.env.local` with:
+
+```env
+VITE_API_URL=http://localhost:5000
+```
+
+Then start frontend:
+
+```bash
+npm run dev
+```
+
+Frontend local URL:
+- http://localhost:5173
+
+## 4) Deployment Instructions
+
+This repository uses two GitHub Actions workflows:
+- `.github/workflows/frontend-deploy.yml`
+- `.github/workflows/backend-deploy.yml`
+
+### Backend deployment (Azure App Service)
+
+Required GitHub settings:
+- Repository variable: `AZURE_BACKEND_APP_NAME`
+- Repository secret: `AZURE_BACKEND_PUBLISH_PROFILE`
+
+Pipeline behavior:
+- Build + test backend
+- Publish with `dotnet publish`
+- Deploy package to Azure Web App using `azure/webapps-deploy@v3`
+
+### Frontend deployment (Azure App Service via ZipDeploy)
+
+Required GitHub settings:
+- Repository variable: `VITE_API_URL` (set to deployed backend base URL, without `/api`)
+- Repository secret: `AZURE_FRONTEND_PUBLISH_PROFILE`
+
+Pipeline behavior:
+- Build + test frontend
+- Upload `dist` artifact
+- Zip artifact and deploy via App Service ZipDeploy endpoint
+
+### Triggering deployment
+- Push to `main` with changes under `frontend/**`, `backend/**`, or workflow files
+- Or manually run via workflow dispatch in GitHub Actions
+
+### Current production endpoints
+- Frontend: https://marketplace-frontend-nhi2.azurewebsites.net/
+- Backend: https://marketplace-backened-nhi2-gxb5gpcthkcqcja9.canadacentral-01.azurewebsites.net/
+
+## 5) API Documentation / Swagger
+
+### Local Swagger UI
+- http://localhost:5000/swagger
+
+Swagger is enabled only in Development environment in `Program.cs`. For production, use the base API URL and endpoint routes directly.
+
+### Common API route groups
+- `/api/auth` (register/login)
+- `/api/products`
+- `/api/cart`
+- `/api/orders`
+- `/api/admin/products`
+- `/api/admin/orders`
+
+## 6) Environment Variables Needed
+
+### Frontend
+- `VITE_API_URL` (optional in local, required for CI/deployment)
+  - Description: Backend base URL used by frontend HTTP client
+  - Example local: `http://localhost:5000`
+  - Example production: `https://marketplace-backened-nhi2-gxb5gpcthkcqcja9.canadacentral-01.azurewebsites.net`
+
+### Backend
+- `ConnectionStrings__DefaultConnection` (required if not using appsettings default)
+  - Description: SQL Server connection string
+- `Jwt__Key` (required outside CI/testing fallback)
+  - Description: JWT signing key; store in user-secrets locally and secret store in production
+- `Jwt__Issuer` (optional)
+  - Default: `BuckeyeMarketplace`
+- `Jwt__Audience` (optional)
+  - Default: `BuckeyeMarketplaceApi`
+- `Cors__AllowedOrigins__0` (optional)
+  - Description: First allowed origin for CORS
+  - Default in local config: `http://localhost:5173`
+
+## 7) Test Commands
+
+### Frontend tests
+```bash
+cd frontend
+npm run test:run -- --passWithNoTests
+```
+
+### Backend tests
+```bash
+dotnet test backend/BuckeyeMarketplaceApi.Tests/BuckeyeMarketplaceApi.Tests.csproj --configuration Release -p:NuGetAudit=false
+```
+
+### E2E tests
+```bash
+cd frontend
+npx playwright test
+```
+
+## 8) Project Documentation
+
+Additional project documentation is in the `docs/` folder, including architecture, testing/QA plan, and AI usage logs.
+
+### Architecture & Design Documentation
+- [System Architecture Diagram](./docs/system-architecture-diagram.md) – High-level system design with Mermaid diagrams
+- [Architecture Decision Records (ADR)](./docs/architecture-decisions.md) – Index of decision rationales
+  - [ADR-0001: React Frontend](./docs/adr/0001-frontend-framework-react.md)
+  - [ADR-0002: ASP.NET Core Backend](./docs/adr/0002-backend-aspnetcore-webapi.md)
+  - [ADR-0003: SQL Server + Identity](./docs/adr/0003-database-sql-server-identity.md)
+  - [ADR-0004: JWT Bearer Auth](./docs/adr/0004-authentication-jwt-bearer.md)
+  - [ADR-0005: Azure App Service Deployment](./docs/adr/0005-deployment-azure-app-service.md)
+  - [ADR-0006: GitHub Actions CI/CD](./docs/adr/0006-deployment-cicd-github-actions.md)
+- [Component Architecture](./docs/component-architecture.md) – Atomic Design breakdown of all components
+- [Database Schema](./docs/database-schema-design.md) – Data models and relationships
+
+### Testing & QA
+- [Testing & QA Plan (M6)](./docs/testing-qa-plan-m6.md) – Test cases, evidence, and bug fixes
+
+### AI Usage
+- [AI Usage Log](./docs/ai-usage.md) – Documentation of AI-assisted development across milestones
 
