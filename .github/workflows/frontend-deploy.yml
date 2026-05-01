@@ -64,6 +64,6 @@ jobs:
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v3
         with:
-          app-name: ${{ vars.AZURE_FRONTEND_APP_NAME }}
+          app-name: marketplace-frontend-nhi2
           package: ./dist
           publish-profile: ${{ secrets.AZURE_FRONTEND_PUBLISH_PROFILE }}
