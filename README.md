@@ -261,6 +261,9 @@ Additional project documentation is in the `docs/` folder, including architectur
 ### Testing & QA
 - [Testing & QA Plan (M6)](./docs/testing-qa-plan-m6.md) – Test cases, evidence, and bug fixes
 
+### User Documentation
+- [User Documentation (User Guide + Admin Guide)](./docs/user-doc.md) – End-user and admin workflows with screenshots
+
 ### AI Usage
 - [AI Usage Log](./docs/ai-usage.md) – Documentation of AI-assisted development across milestones
 
