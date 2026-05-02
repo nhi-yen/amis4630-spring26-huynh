@@ -11,7 +11,7 @@ Buckeye Marketplace supports product browsing, authentication, cart and checkout
 
 ---
 
-## Quick Start
+## ⚡ Quick Start
 
 ### Run locally in 3 steps:
 
