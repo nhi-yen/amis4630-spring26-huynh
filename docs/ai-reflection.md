@@ -20,6 +20,37 @@ This document reflects on how AI tools (GitHub Copilot and Claude) were used thr
 
 ## 2. AI's Role by Milestone
 
+### Milestone 1: User Research, Personas & Planning
+
+**AI Tool Summary**
+- **AI Tool Used:** Microsoft Copilot
+
+**What AI Helped With:**
+- Refining personas (goals, challenges, and clarity of each profile)
+- Strengthening the journey map structure and stage flow
+- Brainstorming an initial set of ~30 potential features based on personas and journey map pain points
+- Narrowing features to ~20 realistic, in-scope options
+- Identifying must-have vs should-have priorities
+- Drafting 5 user stories for must-have features, including acceptance criteria
+
+**Specific Prompts Used:**
+- "Help me refine my personas' goals and challenges."
+- "Help me match my journey map pain points to realistic feature opportunities."
+- "Based on my journey map, generate 30 possible features for a student marketplace."
+- "Based on my personas, which features should be considered must-have versus should-have?"
+- "Write user stories for my must-have features with acceptance criteria."
+
+**What Worked Well:**
+- Copilot was effective for iteration and wording clarity on early planning artifacts
+- Feature brainstorming was fast and broad, then easy to narrow with manual judgment
+- User story drafting provided a strong starting point that matched project direction
+
+**What Didn't Work:**
+- Some generated ideas were too broad for milestone scope and needed filtering
+- Prioritization still required manual tradeoff decisions against time and implementation constraints
+
+**Impact:** Milestone 1 deliverables (personas, journey map, feature list, and user stories) were more structured, actionable, and aligned to later implementation decisions.
+
 ### Milestone 2: Architecture Design & Foundation
 
 **What AI Helped With:**
