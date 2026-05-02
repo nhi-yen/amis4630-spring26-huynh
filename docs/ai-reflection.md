@@ -1,4 +1,4 @@
-# AI Tool Reflection — Buckeye Marketplace M1-M6
+# AI Tool Reflection - Buckeye Marketplace M1-M6
 
 This reflection summarizes how AI tools were used across the project lifecycle, what value they provided, where they struggled, and what I learned from AI-assisted development.
 
