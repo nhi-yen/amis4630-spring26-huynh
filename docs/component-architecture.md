@@ -81,6 +81,13 @@ This component hierarchy applies **Atomic Design** to Buckeye Marketplace's full
 - **Login/Register forms**: email, password, error (form-level)
 - **Admin tables**: sort direction, filter values (local)
 
+## Connection to Milestone 1 Personas
+
+- **Alex** (efficient searcher): Product grid + filter sidebar enable fast browsing and filtering
+- **Maya** (careful buyer): Product detail page + condition badges + seller info build trust
+- **Jordan** (frequent seller): Seller profile, order status visibility, and structured communication reduce frustration from flaky buyers and meetup coordination
+- **Admin persona**: Admin tables with edit/delete/status update actions enable site management
+
 ## Styling Approach
 
 - **CSS Modules**: Each component folder contains `ComponentName.module.css`

@@ -24,7 +24,7 @@ The technology stack was selected to address the pain points identified in user 
 
 - **React + fast rendering** → Addresses Alex's need for efficient browsing and item discovery
 - **Clear component hierarchy** → Helps Maya understand listings and trust item information
-- **JWT authentication + order history** → Provides Jordan with reliable communication and transaction tracking
+- **JWT authentication + structured orders** → Reduces Jordan's frustration with flaky buyers by providing verified accounts and trackable transactions
 - **Structured database schema** → Ensures data consistency and trustworthiness
 - **Automated testing + CI/CD** → Reduces deployment errors and supports rapid iteration
 
