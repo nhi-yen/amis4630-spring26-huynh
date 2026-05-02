@@ -1,12 +1,12 @@
 # Buckeye Marketplace — User Documentation
 
-This document is split into two rubric-aligned parts:
-- User Guide (2-3 pages)
-- Admin Guide (1-2 pages)
+This document is split into two parts:
+- User Guide
+- Admin Guide
 
 ---
 
-## Part A: User Guide (2-3 pages)
+## Part A: User Guide
 
 ### 1. How to Browse Products
 
@@ -19,7 +19,17 @@ From here, you can:
 - See title, price, condition, and seller details
 - Open a product to continue shopping flow
 
-Note: Current screenshot evidence for product details is not included in the final set; the core browse/add/checkout/order flow is documented below.
+### View Product Details
+
+Click a product card from the catalog to open its details page (example: `/products/3`).
+
+![Product details page](../docs/screenshots/user-flow-02-product-details.png)
+
+On this page, you can:
+- Review full product description
+- Confirm condition and seller info
+- Check price and item image
+- Add the selected product to cart
 
 ### 2. How to Create an Account and Login
 
@@ -77,7 +87,7 @@ In cart, you can:
 
 Click Proceed to Checkout from cart:
 
-![Checkout form](../frontend/test-results/checkpoints/05-checkout.png)
+![Checkout form](../docs/screenshots/user-flow-04-checkout-filled.png)
 
 Complete shipping details and submit order.
 
@@ -102,7 +112,7 @@ Each order shows:
 
 ---
 
-## Part B: Admin Guide (1-2 pages)
+## Part B: Admin Guide
 
 Admin-only features appear after logging in as an admin user.
 
